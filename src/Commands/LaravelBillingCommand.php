@@ -6,13 +6,14 @@ use Illuminate\Console\Command;
 
 class LaravelBillingCommand extends Command
 {
-    public $signature = 'laravel-billing';
+    public $signature = 'install:laravel-billing';
 
-    public $description = 'My command';
+    public $description = 'Install the LaravelBilling resources';
 
     public function handle(): int
     {
-        $this->comment('All done');
+        // WIP
+        $this->success('Laravel Billing installed successfully.');
 
         return self::SUCCESS;
     }

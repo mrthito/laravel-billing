@@ -1,0 +1,48 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('stripe_id')->nullable()->index()->after('remember_token');
+            $table->string('pm_type')->nullable()->after('stripe_id');
+            $table->string('pm_last_four', 4)->nullable()->after('pm_type');
+            $table->string('pm_expiration')->nullable()->after('pm_last_four');
+            $table->text('extra_billing_information')->nullable()->after('pm_expiration');
+            $table->timestamp('trial_ends_at')->nullable()->after('extra_billing_information');
+            $table->string('billing_address')->nullable()->after('trial_ends_at');
+            $table->string('billing_address_line_2')->nullable()->after('billing_address');
+            $table->string('billing_city')->nullable()->after('billing_address_line_2');
+            $table->string('billing_state')->nullable()->after('billing_city');
+            $table->string('billing_postal_code', 25)->nullable()->after('billing_state');
+            $table->string('billing_country', 2)->nullable()->after('billing_postal_code');
+            $table->string('vat_id', 50)->nullable()->after('billing_postal_code');
+            $table->text('invoice_emails')->nullable()->after('vat_id');
+        });
+    }
+
+    public function down()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('pm_id');
+            $table->dropColumn('pm_type');
+            $table->dropColumn('pm_last_four');
+            $table->dropColumn('pm_expiration');
+            $table->dropColumn('extra_billing_information');
+            $table->dropColumn('trial_ends_at');
+            $table->dropColumn('billing_address');
+            $table->dropColumn('billing_address_line_2');
+            $table->dropColumn('billing_city');
+            $table->dropColumn('billing_state');
+            $table->dropColumn('billing_postal_code');
+            $table->dropColumn('billing_country');
+            $table->dropColumn('vat_id');
+            $table->dropColumn('invoice_emails');
+        });
+    }
+};
