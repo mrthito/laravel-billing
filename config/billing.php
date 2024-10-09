@@ -16,7 +16,7 @@ return [
      * The branding for the billing portal.
      */
     'branding' => [
-        'logo' => realpath(__DIR__ . '/../public/svg/billing-logo.svg'),
+        'logo' => realpath(__DIR__.'/../public/svg/billing-logo.svg'),
         'colors' => [
             'primary' => '#000000',
             'secondary' => '#000000',
@@ -46,7 +46,7 @@ return [
             'address' => 'Somewhere in the world',
             'location' => 'Kathmandu, Nepal',
             'phone' => '9999999999',
-        ]
+        ],
     ],
 
     /**
@@ -62,8 +62,8 @@ return [
             'notification' => [
                 'status' => true,
                 'emails' => [
-                    'your@email.domain'
-                ]
+                    'your@email.domain',
+                ],
             ],
         ],
     ],

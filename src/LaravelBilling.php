@@ -4,5 +4,5 @@ namespace MrThito\LaravelBilling;
 
 class LaravelBilling
 {
-    # WIP
+    // WIP
 }

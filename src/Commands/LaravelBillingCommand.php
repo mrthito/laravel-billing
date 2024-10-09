@@ -12,7 +12,7 @@ class LaravelBillingCommand extends Command
 
     public function handle(): int
     {
-        # WIP
+        // WIP
         $this->success('Laravel Billing installed successfully.');
 
         return self::SUCCESS;
