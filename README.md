@@ -1,4 +1,4 @@
-[![Banner](https://banners.beyondco.de/Laravel%20Billing.png?theme=light&packageManager=composer+require&packageName=mrthito%2Flaravel-billing&pattern=ticTacToe&style=style_1&description=Advanced+Billing+Portal+for+Laravel&md=1&showWatermark=0&fontSize=125px&images=https%3A%2F%2Flaravel.com%2Fimg%2Flogomark.min.svg)]
+![Banner](https://banners.beyondco.de/Laravel%20Billing.png?theme=light&packageManager=composer+require&packageName=mrthito%2Flaravel-billing&pattern=ticTacToe&style=style_1&description=Advanced+Billing+Portal+for+Laravel&md=1&showWatermark=0&fontSize=125px&images=https%3A%2F%2Flaravel.com%2Fimg%2Flogomark.min.svg)
 
 # Advanced Billing Portal for Laravel
 
