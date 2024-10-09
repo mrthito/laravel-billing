@@ -1,5 +1,8 @@
+[![Banner](https://banners.beyondco.de/Laravel%20Billing.png?theme=light&packageManager=composer+require&packageName=mrthito%2Flaravel-billing&pattern=ticTacToe&style=style_1&description=Advanced+Billing+Portal+for+Laravel&md=1&showWatermark=0&fontSize=125px&images=https%3A%2F%2Flaravel.com%2Fimg%2Flogomark.min.svg)]
+
 # Advanced Billing Portal for Laravel
-> [!WARNING]  
+
+> [!WARNING]
 > This package is currently under development and not recommended to use this package under any curcumstances. Many of the features may change in the future or will be removed. If you want to contribute to this package, you can fork this repository and make a pull request.
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mrthito/laravel-billing.svg?style=flat-square)](https://packagist.org/packages/mrthito/laravel-billing)
@@ -35,18 +38,18 @@ Lets have a look into config file. This is the contents of the published config 
 return [
 
     /**
-     * Routes to use for billing.
-     */
+    * Routes to use for billing.
+    */
     'routes' => [
         'path' => 'billing',
         'middleware' => ['web', 'auth'],
     ],
 
     /**
-     * The branding for the billing portal.
-     */
+    * The branding for the billing portal.
+    */
     'branding' => [
-        'logo' => realpath(__DIR__ . '/../public/svg/billing-logo.svg'),
+        'logo' => realpath(__DIR__ . '/../public/logo/logo.svg'),
         'colors' => [
             'primary' => '#000000',
             'secondary' => '#000000',
@@ -54,22 +57,22 @@ return [
     ],
 
     /**
-     * Date and time formats to use.
-     */
+    * Date and time formats to use.
+    */
     'date_time' => [
         'date_format' => 'Y-m-d',
         'time_format' => 'H:i:s',
     ],
 
     /**
-     * The invoicing settings to use.
-     */
+    * The invoicing settings to use.
+    */
     'invocing' => [
         'prorate' => true, // Prorate charges when making adjustments to a plan.
 
         /**
-         * The company to use for invoicing.
-         */
+        * The company to use for invoicing.
+        */
         'company' => [
             'name' => 'Your Company Name',
             'product' => 'Your Awesome Product',
@@ -80,8 +83,8 @@ return [
     ],
 
     /**
-     * The features for package use on billing process.
-     */
+    * The features for package use on billing process.
+    */
     'features' => [
         'accept_terms' => true,
         'eu_vat' => [
@@ -99,17 +102,17 @@ return [
     ],
 
     /**
-     * The provider to use for billing. Currently only 'stripe' is supported.
-     */
+    * The provider to use for billing. Currently only 'stripe' is supported.
+    */
     'provider' => 'stripe',
 
     /**
-     * The default plan to use when creating a new subscription.
-     */
+    * The default plan to use when creating a new subscription.
+    */
     'stripe' => [
         /**
-         * The keys to use for the stripe provider.
-         */
+        * The keys to use for the stripe provider.
+        */
         'auth' => [
             'key' => env('LARAVEL_BILLING_STRIPE_KEY'),
             'secret' => env('LARAVEL_BILLING_STRIPE_SECRET'),
@@ -117,28 +120,28 @@ return [
         ],
 
         /**
-         * The model to use for the user.
-         */
+        * The model to use for the user.
+        */
         'user_model' => User::class,
 
         /**
-         * The trial settings to use.
-         */
+        * The trial settings to use.
+        */
         'enable_trial' => true,
 
         /**
-         * The number of days for the trial.
-         */
+        * The number of days for the trial.
+        */
         'trial_days' => 7,
 
         /**
-         * The default interval to use.
-         */
+        * The default interval to use.
+        */
         'default_interval' => 'monthly',
 
         /**
-         * The plans to use for the stripe provider.
-         */
+        * The plans to use for the stripe provider.
+        */
         'plans' => [
             [
                 'name' => 'Basic',
@@ -166,8 +169,8 @@ return [
 ```php
 class User extends Authenticatable
 {
-    use UseBilling;
-    // ...
+use UseBilling;
+// ...
 
 }
 ```
