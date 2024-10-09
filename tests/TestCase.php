@@ -3,8 +3,8 @@
 namespace MrThito\LaravelBilling\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use MrThito\LaravelBilling\LaravelBillingServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
