@@ -16,7 +16,7 @@ return [
      * The branding for the billing portal.
      */
     'branding' => [
-        'logo' => realpath(__DIR__ . '/../public/logo/logo.svg'),
+        'logo' => realpath(__DIR__.'/../public/logo/logo.svg'),
         'colors' => [
             'primary' => '#000000',
             'secondary' => '#000000',
