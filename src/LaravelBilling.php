@@ -2,4 +2,7 @@
 
 namespace MrThito\LaravelBilling;
 
-class LaravelBilling {}
+class LaravelBilling
+{
+    # WIP
+}
