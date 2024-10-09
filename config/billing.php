@@ -46,7 +46,7 @@ return [
             'address' => 'Somewhere in the world',
             'location' => 'Kathmandu, Nepal',
             'phone' => '9999999999',
-        ]
+        ],
     ],
 
     /**
@@ -62,8 +62,8 @@ return [
             'notification' => [
                 'status' => true,
                 'emails' => [
-                    'your@email.domain'
-                ]
+                    'your@email.domain',
+                ],
             ],
         ],
     ],

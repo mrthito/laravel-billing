@@ -8,6 +8,6 @@ class StripeBillingPortalController
 {
     public function __invoke(Request $request)
     {
-        # WIP
+        // WIP
     }
 }
