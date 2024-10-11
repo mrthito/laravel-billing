@@ -23,7 +23,7 @@ class LaravelBillingServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'laravel-billing');
 
         // Livewire Components for Billing Page
-        Livewire::component('some-component', Billing::class);
+        Livewire::component('billing-portal', Billing::class);
 
         // Webhook URL should not check CSRF token
         // $this->app->resolving(VerifyCsrfToken::class, function ($middleware) {
