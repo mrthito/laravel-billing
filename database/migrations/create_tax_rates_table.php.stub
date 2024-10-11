@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tax_rates', function (Blueprint $table) {
             $table->id();
-            $table->string('pm_id')->index();
+            $table->string('stripe_id')->index();
             $table->double('percentage')->index();
             $table->timestamps();
         });
