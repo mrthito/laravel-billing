@@ -17,8 +17,11 @@
     ],
     "require": {
         "php": "^8.2",
+        "cknow/laravel-money": "^8.1",
+        "dompdf/dompdf": "^3.0",
         "illuminate/contracts": "^10.0||^11.0",
-        "laravel/cashier": "^15.0"
+        "laravel/cashier": "^15.0",
+        "livewire/livewire": "^3.5.10"
     },
     "require-dev": {
         "laravel/pint": "^1.14",
