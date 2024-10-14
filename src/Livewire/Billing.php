@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Cashier\Cashier;
 use Livewire\Component;
+use MrThito\LaravelBilling\Libraries\Countries;
 
 class Billing extends Component
 {
@@ -14,6 +15,12 @@ class Billing extends Component
     public $plans = [];
 
     public $billingToggle = 'yearly';
+
+    public $countries;
+
+    public $form = [];
+
+    public $invoices = [];
 
     public function init()
     {
@@ -52,6 +59,27 @@ class Billing extends Component
             ];
         });
 
+        $this->form['billing_address'] = $user->billing_address;
+        $this->form['billing_address_line_2'] = $user->billing_address_line_2;
+        $this->form['billing_city'] = $user->billing_city;
+        $this->form['billing_state'] = $user->billing_state;
+        $this->form['billing_postal_code'] = $user->billing_postal_code;
+        $this->form['billing_country'] = $user->billing_country;
+        $this->form['extra_billing_information'] = $user->extra_billing_information;
+
+        $this->form['invoice_emails'] = $user->invoice_emails;
+
+        $this->invoices = $user->invoices()->map(function ($invoice) {
+            return [
+                'id' => $invoice->id,
+                'date' => $invoice->date()->format('M d, Y'),
+                'total' => $invoice->total(),
+                'status' => $invoice->status,
+            ];
+        });
+
+        $this->countries = Countries::get();
+
         $this->loading = false;
     }
 
@@ -71,10 +99,9 @@ class Billing extends Component
         }
 
         // If user is already subscribed to a plan, swap the plan
-        // dd($user->redirectToBillingPortal(), $user->subscribed());
+        dd($user->redirectToBillingPortal(), $user->subscribed());
         if ($user->subscribed()) {
-            // $user->subscription('default')->swap($plan['yearly_price_id']);
-            dd('swap');
+            return $user->redirectToBillingPortal();
         } else {
             $priceId = $this->billingToggle === 'yearly' ? $plan['yearly_price_id'] : $plan['monthly_price_id'];
             $trial = config('laravel-billing.stripe.enable_trial', false);
@@ -99,11 +126,57 @@ class Billing extends Component
     public function saveAddress()
     {
         $this->validate([
-            'form.address' => 'required',
-            'form.city' => 'required',
-            'form.state' => 'required',
-            'form.zip' => 'required',
-            'form.country' => 'required',
+            'form.billing_address' => 'required',
+            'form.billing_address_line_2' => 'required',
+            'form.billing_city' => 'required',
+            'form.billing_state' => 'required',
+            'form.billing_postal_code' => 'required',
+            'form.billing_country' => 'required',
+            'form.extra_billing_information' => 'required',
+        ], [
+            'form.billing_address.required' => 'The billing address field is required.',
+            'form.billing_address_line_2.required' => 'The billing address line 2 field is required.',
+            'form.billing_city.required' => 'The billing city field is required.',
+            'form.billing_state.required' => 'The billing state field is required.',
+            'form.billing_postal_code.required' => 'The billing postal code field is required.',
+            'form.billing_country.required' => 'The billing country field is required.',
+            'form.extra_billing_information.required' => 'The extra billing information field is required.',
         ]);
+
+        $user = Auth::user();
+        $user->update([
+            'extra_billing_information' => $this->form['extra_billing_information'],
+            'billing_address' => $this->form['billing_address'],
+            'billing_address_line_2' => $this->form['billing_address_line_2'],
+            'billing_city' => $this->form['billing_city'],
+            'billing_state' => $this->form['billing_state'],
+            'billing_postal_code' => $this->form['billing_postal_code'],
+            'billing_country' => $this->form['billing_country'],
+        ]);
+
+        session()->flash('addressSaved', 'Address saved successfully');
+    }
+
+    public function saveEmail()
+    {
+        $this->validate([
+            'form.invoice_emails' => 'required',
+        ], [
+            'form.invoice_emails.required' => 'The invoice emails field is required.',
+        ]);
+
+        $user = Auth::user();
+        $user->update([
+            'invoice_emails' => $this->form['invoice_emails'],
+        ]);
+
+        session()->flash('emailsSaved', 'Emails saved successfully');
+    }
+
+    public function downloadInvoice($invoiceId)
+    {
+        $url = route('laravel-billing.invoice.download', ['invoice' => $invoiceId]);
+        session()->flash('successInvoice', 'Invoice downloaded successfully');
+        return redirect($url);
     }
 }
