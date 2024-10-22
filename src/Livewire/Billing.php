@@ -22,6 +22,10 @@ class Billing extends Component
 
     public $invoices = [];
 
+    public $invoiceEmails = [];
+
+    public $currentPlan = [];
+
     public function init()
     {
         $user = Auth::user();
@@ -67,7 +71,8 @@ class Billing extends Component
         $this->form['billing_country'] = $user->billing_country;
         $this->form['extra_billing_information'] = $user->extra_billing_information;
 
-        $this->form['invoice_emails'] = $user->invoice_emails;
+        $emails = explode(', ', $user->invoice_emails);
+        $this->invoiceEmails = $emails;
 
         $this->invoices = $user->invoices()->map(function ($invoice) {
             return [
@@ -75,10 +80,29 @@ class Billing extends Component
                 'date' => $invoice->date()->format('M d, Y'),
                 'total' => $invoice->total(),
                 'status' => $invoice->status,
+                'number' => $invoice->number,
             ];
         });
 
         $this->countries = Countries::get();
+
+        $currentPlan = $user->subscription('laravel-billing-subscription')->stripe_price;
+        // find the current plan by matching the price id either monthly or yearly
+        $plan = collect($this->plans)->first(function ($plan) use ($currentPlan) {
+            return $plan['monthly_price_id'] === $currentPlan || $plan['yearly_price_id'] === $currentPlan;
+        });
+        if ($plan && $plan['yearly_price_id'] === $currentPlan) {
+            $interval = 'yearly';
+        } else {
+            $interval = 'monthly';
+        }
+        // dd($plan);
+
+        $this->currentPlan = [
+            'id' => $currentPlan,
+            'interval' => $interval
+        ];
+        // dd($this->currentPlan);
 
         $this->loading = false;
     }
@@ -98,10 +122,25 @@ class Billing extends Component
             $user->createAsStripeCustomer();
         }
 
+        // check if user has address
+        if (! $this->form['billing_address']) {
+            session()->flash('alreadySubscribed', 'Please fill in your address before subscribing');
+            return;
+        }
+
         // If user is already subscribed to a plan, swap the plan
-        dd($user->redirectToBillingPortal(), $user->subscribed());
-        if ($user->subscribed()) {
-            return $user->redirectToBillingPortal();
+        if ($user->subscribed('laravel-billing-subscription')) {
+            // get current subscription
+            $subscription = $user->subscription('laravel-billing-subscription');
+            $priceId = $subscription->stripe_price;
+            // check if the current subscription is the same as the plan and user selected
+            if ($priceId === ($this->billingToggle === 'yearly' ? $plan['yearly_price_id'] : $plan['monthly_price_id'])) {
+                session()->flash('alreadySubscribed', 'You are already subscribed to this plan');
+                return;
+            }
+
+            $user = $subscription->swap($this->billingToggle === 'yearly' ? $plan['yearly_price_id'] : $plan['monthly_price_id']);
+            session()->flash('subscriptionSwapped', 'Subscription swapped successfully');
         } else {
             $priceId = $this->billingToggle === 'yearly' ? $plan['yearly_price_id'] : $plan['monthly_price_id'];
             $trial = config('laravel-billing.stripe.enable_trial', false);
@@ -157,20 +196,33 @@ class Billing extends Component
         session()->flash('addressSaved', 'Address saved successfully');
     }
 
-    public function saveEmail()
+    public function saveInvoiceEmails()
     {
         $this->validate([
-            'form.invoice_emails' => 'required',
+            'invoiceEmails' => 'required|array',
+            'invoiceEmails.*' => 'email:rfc,dns',
         ], [
-            'form.invoice_emails.required' => 'The invoice emails field is required.',
+            'invoiceEmails.required' => 'The invoice emails field is required.',
+            'invoiceEmails.*.email' => 'The invoice emails must be a valid email address.',
         ]);
 
         $user = Auth::user();
         $user->update([
-            'invoice_emails' => $this->form['invoice_emails'],
+            'invoice_emails' => implode(', ', $this->invoiceEmails),
         ]);
 
         session()->flash('emailsSaved', 'Emails saved successfully');
+    }
+
+    public function addInvoiceEmail()
+    {
+        $this->invoiceEmails[] = '';
+    }
+    public function removeInvoiceEmail($index)
+    {
+        unset($this->invoiceEmails[$index]);
+        // make sure to reindex the array
+        $this->invoiceEmails = array_values($this->invoiceEmails);
     }
 
     public function downloadInvoice($invoiceId)
@@ -178,5 +230,10 @@ class Billing extends Component
         $url = route('laravel-billing.invoice.download', ['invoice' => $invoiceId]);
         session()->flash('successInvoice', 'Invoice downloaded successfully');
         return redirect($url);
+    }
+
+    public function toggleBilling($toggle)
+    {
+        $this->billingToggle = $toggle;
     }
 }
