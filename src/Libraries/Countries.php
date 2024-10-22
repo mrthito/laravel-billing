@@ -258,6 +258,6 @@ final class Countries
 
     public static function find($code)
     {
-        return static::get()[$code] ?? null;
+        return self::get()[$code] ?? null;
     }
 }
