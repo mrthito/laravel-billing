@@ -165,7 +165,7 @@ class StripeWebhookController extends WebhookController
 
         $emails = config('laravel-billing.features.email.notification.emails', []);
 
-        Mail::to($emails)->send(new SendInvoiceMail($user, invoice: $invoice));
+        Mail::to($emails)->send(new SendInvoiceMail(user: $user, invoice: $invoice));
     }
 
     protected function sendUserPaymentConfirmationNotificationEmail($user, $payment)

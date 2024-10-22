@@ -26,9 +26,9 @@ class LaravelBillingServiceProvider extends ServiceProvider
         Livewire::component('billing-portal', Billing::class);
 
         // Webhook URL should not check CSRF token
-        // $this->app->resolving(VerifyCsrfToken::class, function ($middleware) {
-        //     // $middleware->except('laravel-billing/stripe/webhook');
-        // });
+        $this->app->resolving(VerifyCsrfToken::class, function ($middleware) {
+            $middleware->except('laravel-billing/stripe/webhook');
+        });
     }
 
     public function register()
