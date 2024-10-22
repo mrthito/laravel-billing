@@ -1,20 +1,20 @@
 <?php
 
-if (!function_exists('lb_subscribed')) {
+if (! function_exists('lb_subscribed')) {
     function lb_subscribed()
     {
         return auth()->user()->subscribed('laravel-billing-subscription');
     }
 }
 
-if (!function_exists('lb_subscription')) {
+if (! function_exists('lb_subscription')) {
     function lb_subscription()
     {
         return auth()->user()->subscription('laravel-billing-subscription');
     }
 }
 
-if (!function_exists('lb_current_plan')) {
+if (! function_exists('lb_current_plan')) {
     function lb_current_plan()
     {
         $user = auth()->user();
@@ -31,11 +31,11 @@ if (!function_exists('lb_current_plan')) {
         return [
             'name' => $plan['name'],
             'description' => $plan['description'],
-            'interval' => $interval
+            'interval' => $interval,
         ];
     }
 
-    if (!function_exists('lb_on_trial')) {
+    if (! function_exists('lb_on_trial')) {
         function lb_on_trial()
         {
             return auth()->user()->onTrial('laravel-billing-subscription');

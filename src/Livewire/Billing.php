@@ -100,7 +100,7 @@ class Billing extends Component
 
         $this->currentPlan = [
             'id' => $currentPlan,
-            'interval' => $interval
+            'interval' => $interval,
         ];
         // dd($this->currentPlan);
 
@@ -125,6 +125,7 @@ class Billing extends Component
         // check if user has address
         if (! $this->form['billing_address']) {
             session()->flash('alreadySubscribed', 'Please fill in your address before subscribing');
+
             return;
         }
 
@@ -136,6 +137,7 @@ class Billing extends Component
             // check if the current subscription is the same as the plan and user selected
             if ($priceId === ($this->billingToggle === 'yearly' ? $plan['yearly_price_id'] : $plan['monthly_price_id'])) {
                 session()->flash('alreadySubscribed', 'You are already subscribed to this plan');
+
                 return;
             }
 
@@ -218,6 +220,7 @@ class Billing extends Component
     {
         $this->invoiceEmails[] = '';
     }
+
     public function removeInvoiceEmail($index)
     {
         unset($this->invoiceEmails[$index]);
