@@ -177,6 +177,7 @@ class Billing extends Component
     {
         $url = route('laravel-billing.invoice.download', ['invoice' => $invoiceId]);
         session()->flash('successInvoice', 'Invoice downloaded successfully');
+
         return redirect($url);
     }
 }
